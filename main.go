@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"gopkg.in/gorp.v1"
@@ -53,55 +54,132 @@ func main() {
 	{
 		v1.GET("/users", GetUsers)
 		v1.GET("/users/:id", GetUser)
-		// v1.POST("/users", PostUser)
-		// v1.PUT("/users/:id", UpdateUser)
-		// v1.DELETE("/users/:id", UpdateUser)
+		v1.POST("/users", PostUser)
+		v1.PUT("/users/:id", UpdateUser)
+		v1.DELETE("/users/:id", DeleteUser)
 	}
 
 	r.Run(":9090")
 }
 
 func GetUsers(c *gin.Context) {
-	type users []User
+	//changed to var from type
+	//also make it a slice since multiple users will be gotten
+	var users []User
 
-	//static data
-	var users = Users{
-		User{Id: 1, Firstname: "Gabriel", Lastname: "Patron"},
-		User{Id: 2, Firstname: "Mara", Lastname: "Shen"},
+	//sql statement to get all users
+	_, err := dbmap.Select(&users, "SELECT * FROM user")
+
+	if err != nil {
+		c.JSON(404, gin.H{"error": "no users in table"})
 	}
 
 	//makes users JSON and gives the site 200 code
 	c.JSON(200, users)
-	// curl -i http://localhost:8080/api/v1/users
+	// curl -i http://localhost:9090/api/v1/users
 }
 
 func GetUser(c *gin.Context) {
 	//get a user using its id
 	id := c.Params.ByName("id")
+	//user is just one because we are just getting one user
+	var user User
 
-	//convernt the JSON to an int
-	user_id, _ := strconv.ParseInt(id, 0, 64)
+	err := dbmap.SelectOne(&user, "SELECT * FROM user WHERE id=?", id)
 
-	if user_id == 1 {
-		content := gin.H{
-			"id":        user_id,
-			"firstname": "Gabriel",
-			"lastname":  "Patron",
-		}
-		c.JSON(200, content)
-	} else if user_id == 2 {
-		content := gin.H{
-			"id":        user_id,
-			"firstname": "Mara",
-			"lastname":  "Shen",
+	if err == nil {
+		user_id, _ := strconv.ParseInt(id, 0, 64)
+
+		content := &User{
+			Id:        user_id,
+			Firstname: user.Firstname,
+			Lastname:  user.Lastname,
 		}
 		c.JSON(200, content)
 	} else {
-		content := gin.H{
-			"error": "user id #" + id + "not found",
-		}
-		c.JSON(400, content)
+		c.JSON(404, gin.H{"error": "user not found"})
 	}
 
-	// curl -i http://localhost:8080/api/v1/users/1
+	// curl -i http://localhost:9090/api/v1/users/1
+}
+
+func PostUser(c *gin.Context) {
+	var user User
+	//Bind checks content-type of parameter and binds immediately
+	c.Bind(&user)
+
+	//if they wrote for first name and last name
+	if user.Firstname != "" && user.Lastname != "" {
+		//insert
+		if insert, _ := dbmap.Exec(`INSERT INTO user(firstname, lastname) VALUES(?, ?)`, user.Firstname, user.Lastname); insert != nil {
+			fmt.Println(insert.LastInsertId())
+			user_id, err := insert.LastInsertId()
+
+			if err == nil {
+				content := &User{
+					Id:        user_id,
+					Firstname: user.Firstname,
+					Lastname:  user.Lastname,
+				}
+				c.JSON(201, content)
+			} else {
+				checkErr(err, "Failed insert")
+			}
+		}
+	} else {
+		c.JSON(422, gin.H{"error": "fields are empty"})
+	}
+	// curl -i -X POST -H "Content-Type: application/json" -d "{ \"firstname\": \"Thea\", \"lastname\": \"Queen\" }" http://localhost:9090/api/v1/users
+}
+
+func UpdateUser(c *gin.Context) {
+	id := c.Params.ByName("id")
+	var user User
+	err := dbmap.SelectOne(&user, "SELECT * FROM user WHERE id=?", id)
+
+	if err == nil {
+		var json User
+		c.Bind(&json)
+
+		user_id, _ := strconv.ParseInt(id, 0, 64)
+
+		user := User{
+			Id:        user_id,
+			Firstname: json.Firstname,
+			Lastname:  json.Lastname,
+		}
+		if user.Firstname != "" && user.Lastname != "" {
+			_, err := dbmap.Update(&user)
+
+			if err == nil {
+				c.JSON(200, user)
+			} else {
+				checkErr(err, "Update failed")
+			}
+		} else {
+			c.JSON(422, gin.H{"error": "fields are empty"})
+		}
+	} else {
+		c.JSON(404, gin.H{"error": "user not found"})
+	}
+	//curl -i -X PUT -H "Content-Type: application/json" -d "{ \"firstname\": \"Thea\", \"lastname\": \"Merlyn\" }" http://localhost:0-0-/api/v1/users/1
+}
+
+func DeleteUser(c *gin.Context) {
+	id := c.Params.ByName("id")
+	var user User
+	err := dbmap.SelectOne(&user, "SELECT * FROM user WHERE id=?", id)
+
+	if err == nil {
+		_, err = dbmap.Delete(&user)
+
+		if err == nil {
+			c.JSON(200, gin.H{"id #" + id: "deleted"})
+		} else {
+			checkErr(err, "Delete failed")
+		}
+	} else {
+		c.JSON(404, gin.H{"error": "user not found"})
+	}
+	//curl -i -X DELETE http://localhost:0-0-/api/v1/users/1
 }
