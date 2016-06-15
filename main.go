@@ -15,18 +15,23 @@ type User struct {
 	Lastname  string `db: "lastname" json: "lastname"`
 }
 
+//make dbmap global
 var dbmap = initDb()
 
+//initalize db called ginmysql
 func initDb() *gorp.DbMap {
 	db, err := sql.Open("mysql", "root:mysqlpassword@/ginmysql")
 	checkErr(err, "sql.Open failed")
 
+	//idk what this does huhu
 	dbmap := &gorp.DbMap{
 		Db:      db,
 		Dialect: gorp.MySQLDialect{"InnoDB", "UTF8"},
 	}
 
+	//creates table User in dbmap
 	dbmap.AddTableWithName(User{}, "User").SetKeys(true, "Id")
+	//make the table if it doesn't exist
 	err = dbmap.CreateTablesIfNotExists()
 	checkErr(err, "Create table failed")
 
@@ -57,7 +62,7 @@ func main() {
 }
 
 func GetUsers(c *gin.Context) {
-	type Users []User
+	type users []User
 
 	//static data
 	var users = Users{
