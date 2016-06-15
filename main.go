@@ -1,7 +1,11 @@
 package main
 
 import (
+	"database/sql"
 	"github.com/gin-gonic/gin"
+	_ "github.com/go-sql-driver/mysql"
+	"gopkg.in/gorp.v1"
+	"log"
 	"strconv"
 )
 
@@ -9,6 +13,30 @@ type User struct {
 	Id        int64  `db:"id" json:"id"`
 	Firstname string `db: "firstname" json: "firstname"`
 	Lastname  string `db: "lastname" json: "lastname"`
+}
+
+var dbmap = initDb()
+
+func initDb() *gorp.DbMap {
+	db, err := sql.Open("mysql", "root:mysqlpassword@/ginmysql")
+	checkErr(err, "sql.Open failed")
+
+	dbmap := &gorp.DbMap{
+		Db:      db,
+		Dialect: gorp.MySQLDialect{"InnoDB", "UTF8"},
+	}
+
+	dbmap.AddTableWithName(User{}, "User").SetKeys(true, "Id")
+	err = dbmap.CreateTablesIfNotExists()
+	checkErr(err, "Create table failed")
+
+	return dbmap
+}
+
+func checkErr(err error, msg string) {
+	if err != nil {
+		log.Fatalln(msg, err)
+	}
 }
 
 func main() {
