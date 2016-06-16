@@ -45,9 +45,19 @@ func checkErr(err error, msg string) {
 	}
 }
 
+//allow other apps to access this server
+func Cors() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Add("Access-Control-Allow-Origin", "*")
+		c.Next()
+	}
+}
+
 func main() {
 	//set gin
 	r := gin.Default()
+	//activate Cors
+	r.Use(Cors())
 
 	//set routes
 	v1 := r.Group("api/v1")
@@ -57,6 +67,9 @@ func main() {
 		v1.POST("/users", PostUser)
 		v1.PUT("/users/:id", UpdateUser)
 		v1.DELETE("/users/:id", DeleteUser)
+		//for XMLHttpRequests
+		v1.OPTIONS("/users", OptionsUser)
+		v1.OPTIONS("/users/:id", OptionsUser)
 	}
 
 	r.Run(":9090")
@@ -182,4 +195,10 @@ func DeleteUser(c *gin.Context) {
 		c.JSON(404, gin.H{"error": "user not found"})
 	}
 	//curl -i -X DELETE http://localhost:9090/api/v1/users/1
+}
+
+func OptionsUser(c *gin.Context) {
+	c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, PUT, DELETE")
+	c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	c.Next()
 }
