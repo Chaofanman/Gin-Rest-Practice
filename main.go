@@ -162,7 +162,7 @@ func UpdateUser(c *gin.Context) {
 	} else {
 		c.JSON(404, gin.H{"error": "user not found"})
 	}
-	//curl -i -X PUT -H "Content-Type: application/json" -d "{ \"firstname\": \"Thea\", \"lastname\": \"Merlyn\" }" http://localhost:0-0-/api/v1/users/1
+	//curl -i -X PUT -H "Content-Type: application/json" -d "{ \"firstname\": \"Mara\", \"lastname\": \"Shen\" }" http://localhost:9090/api/v1/users/1
 }
 
 func DeleteUser(c *gin.Context) {
@@ -181,5 +181,5 @@ func DeleteUser(c *gin.Context) {
 	} else {
 		c.JSON(404, gin.H{"error": "user not found"})
 	}
-	//curl -i -X DELETE http://localhost:0-0-/api/v1/users/1
+	//curl -i -X DELETE http://localhost:9090/api/v1/users/1
 }
