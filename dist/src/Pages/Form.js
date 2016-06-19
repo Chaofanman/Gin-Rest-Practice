@@ -1,7 +1,7 @@
 import React from 'react';
 import superagent from 'superagent';
 
-class Detail extends React.Component{
+class Form extends React.Component{
     constructor(props){
         super(props);
         this.state = { 
@@ -28,9 +28,10 @@ class Detail extends React.Component{
                         if(error || !response.ok){
                             alert("Error posting");
                         } else{
-                            alert(JSON.stringify(response.body));
+                            JSON.stringify(response.body);
                         }
                     });
+
     }
 
     handleChange(event){
@@ -45,12 +46,12 @@ class Detail extends React.Component{
     render(){
         return (<div> 
             <form className="form" onSubmit={this.formSubmit}>
-                <input type="text" name="firstname" value={this.state.firstname} onChange={this.handleChange} />
-                <input type="text" name="lastname" value={this.state.lastname} onChange={this.handleChange} />
+                <input type="text" name="firstname" placeholder="First Name" value={this.state.firstname} onChange={this.handleChange} />
+                <input type="text" name="lastname" placeholder="Last Name" value={this.state.lastname} onChange={this.handleChange} />
                 <button > Submit</button>
             </form>
         </div>);
       }
     };
 
-export default Detail;
+export default Form;
