@@ -24,9 +24,23 @@ class App extends React.Component{
                 });
     }
 
+    formProcess(data){
+        console.log("IN FORM PROCESS", data);
+        superagent.post('http://localhost:9090/api/v1/users')
+                    .send(data)
+                    .set('Accept', 'application/json')
+                    .end(function(error, response){
+                        if(error || !response.ok){
+                            alert("Error posting");
+                        } else{
+                            JSON.stringify(response.body);
+                        }
+                    });
+    }
+
     render(){
         return(<div>
-            <Form />
+            <Form onFormSubmit={this.formProcess}/>
             <Detail users={this.state.users}/>
         </div>);
     }

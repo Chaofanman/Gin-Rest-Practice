@@ -9,10 +9,10 @@ class Form extends React.Component{
             lastname: ""
         };
         this.handleChange = this.handleChange.bind(this);
-        this.formSubmit = this.formSubmit.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    formSubmit(event){
+    handleSubmit(event){
         event.preventDefault();
         console.log("Submitted");
         console.log("Firstname: ", this.state.firstname);
@@ -21,16 +21,7 @@ class Form extends React.Component{
         var firstname = this.state.firstname;
         var lastname = this.state.lastname;
 
-        superagent.post('http://localhost:9090/api/v1/users')
-                    .send({ firstname: firstname, lastname: lastname})
-                    .set('Accept', 'application/json')
-                    .end(function(error, response){
-                        if(error || !response.ok){
-                            alert("Error posting");
-                        } else{
-                            JSON.stringify(response.body);
-                        }
-                    });
+        this.props.onFormSubmit({firstname: firstname, lastname: lastname});
 
     }
 
@@ -45,7 +36,7 @@ class Form extends React.Component{
 
     render(){
         return (<div> 
-            <form className="form" onSubmit={this.formSubmit}>
+            <form className="form" onSubmit={this.handleSubmit}>
                 <input type="text" name="firstname" placeholder="First Name" value={this.state.firstname} onChange={this.handleChange} />
                 <input type="text" name="lastname" placeholder="Last Name" value={this.state.lastname} onChange={this.handleChange} />
                 <button > Submit</button>
