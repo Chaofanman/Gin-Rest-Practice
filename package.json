@@ -33,9 +33,9 @@
   },
   "dependencies": {
     "history": "^3.0.0",
+    "promise": "^7.1.1",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
-    "react-router": "^2.4.1",
-    "superagent": "^2.0.0"
+    "react-router": "^2.4.1"
   }
 }

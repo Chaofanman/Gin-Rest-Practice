@@ -36,6 +36,13 @@ class App extends React.Component{
                             JSON.stringify(response.body);
                         }
                     });
+        // var users = this.state.users;
+        // users.push(data);
+        // this.setState({users})
+    }
+
+    applyChanges(data){
+        console.log("in apply changes");
     }
 
     render(){
