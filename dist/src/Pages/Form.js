@@ -17,6 +17,20 @@ class Detail extends React.Component{
         console.log("Submitted");
         console.log("Firstname: ", this.state.firstname);
         console.log("Lastname: ", this.state.lastname);
+
+        var firstname = this.state.firstname;
+        var lastname = this.state.lastname;
+
+        superagent.post('http://localhost:9090/api/v1/users')
+                    .send({ firstname: firstname, lastname: lastname})
+                    .set('Accept', 'application/json')
+                    .end(function(error, response){
+                        if(error || !response.ok){
+                            alert("Error posting");
+                        } else{
+                            alert(JSON.stringify(response.body));
+                        }
+                    });
     }
 
     handleChange(event){
