@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import superagent from 'superagent';
 
-import Detail from './pages/UserList';
+import UserList from './pages/UserList';
 import Form from './pages/Form';
 
 class App extends React.Component{
@@ -12,10 +12,16 @@ class App extends React.Component{
             users: []
         };
         this.formProcess = this.formProcess.bind(this);
+        this.deleteProcess = this.deleteProcess.bind(this);
     }
 
     componentWillMount(){
     	this.getUsers();
+    }
+
+    deleteProcess(data){
+    	console.log("Id: ", data);
+    	console.log("In deleteProcess");
     }
 
     formProcess(data){
@@ -50,7 +56,7 @@ class App extends React.Component{
     	console.log("Render: ", this.state.users);
         return(<div>
             <Form onFormSubmit={this.formProcess}/>
-            <Detail users={this.state.users}/>
+            <UserList users={this.state.users} onDeleteSubmit={this.deleteProcess}/>
         </div>);
     }
 }
