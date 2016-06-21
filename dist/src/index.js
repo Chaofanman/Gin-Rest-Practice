@@ -26,9 +26,9 @@ class App extends React.Component{
     	superagent.del('http://localhost:9090/api/v1/users/' + data)
     				.end((error, response) => {
     					if(error || !response.ok){
-    						alert("ERROR:", error);
+    						alert("Error Deleting: ", error);
+    						console.log(error);
     					} else {
-    						console.log("Delete complete");
     						this.getUsers();
     					}
     				});
@@ -41,7 +41,7 @@ class App extends React.Component{
                     .set('Accept', 'application/json')
                     .end((error, response) => {
                         if(error || !response.ok){
-                            alert("Error posting");
+                            alert("Error Posting: ", error);
                             console.log(error);
                         } else {
                         	JSON.stringify(response.body);

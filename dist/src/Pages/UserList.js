@@ -7,9 +7,9 @@ class UserList extends React.Component{
 	}
 
 	handleDelete(event){
-		//console.log("In handle delete");
-		//console.log(event.target.value);
-		var value;
+		console.log("In handle delete");
+		console.log(event.target.value);
+
 		this.props.onDeleteSubmit(event.target.value);
 	}
 
