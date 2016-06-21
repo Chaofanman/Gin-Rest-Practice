@@ -11,6 +11,7 @@ class App extends React.Component{
         this.state = {
             users: []
         };
+        this.formProcess = this.formProcess.bind(this);
     }
 
     componentWillMount(){
@@ -48,7 +49,7 @@ class App extends React.Component{
     render(){
     	console.log("Render: ", this.state.users);
         return(<div>
-            <Form onFormSubmit={this.formProcess.bind(this)}/>
+            <Form onFormSubmit={this.formProcess}/>
             <Detail users={this.state.users}/>
         </div>);
     }
