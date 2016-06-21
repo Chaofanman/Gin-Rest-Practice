@@ -20,8 +20,18 @@ class App extends React.Component{
     }
 
     deleteProcess(data){
-    	console.log("Id: ", data);
-    	console.log("In deleteProcess");
+    	//console.log("In deleteProcess");
+    	//console.log("Id: ", data);
+    	//curl -i -X DELETE http://localhost:9090/api/v1/users/1
+    	superagent.del('http://localhost:9090/api/v1/users/' + data)
+    				.end((error, response) => {
+    					if(error || !response.ok){
+    						alert("ERROR:", error);
+    					} else {
+    						console.log("Delete complete");
+    						this.getUsers();
+    					}
+    				});
     }
 
     formProcess(data){
@@ -53,7 +63,7 @@ class App extends React.Component{
     }
 
     render(){
-    	console.log("Render: ", this.state.users);
+    	//console.log("Render: ", this.state.users);
         return(<div>
             <Form onFormSubmit={this.formProcess}/>
             <UserList users={this.state.users} onDeleteSubmit={this.deleteProcess}/>
