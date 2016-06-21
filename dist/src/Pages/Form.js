@@ -22,8 +22,15 @@ class Form extends React.Component{
         var lastname = this.state.lastname;
 
         console.log(firstname, lastname);
+        if((firstname != "" ) && (lastname != "")){
+        	this.props.onFormSubmit({firstname: firstname, lastname: lastname});	
+        	this.setState({firstname: "", lastname: ""});
+        } else {
+        	alert("You have no input");
+        }
+        
 
-        this.props.onFormSubmit({firstname: firstname, lastname: lastname});
+        
     }
 
     handleChange(event){
@@ -37,9 +44,9 @@ class Form extends React.Component{
 
     render(){
         return (<div> 
-            <form className="form" onSubmit={this.handleSubmit}>
-                <input type="text" name="firstname" placeholder="First Name" value={this.state.firstname} onChange={this.handleChange} />
-                <input type="text" name="lastname" placeholder="Last Name" value={this.state.lastname} onChange={this.handleChange} />
+            <form className="inputForm" onSubmit={this.handleSubmit}>
+                <input type="text" name="firstname" id="firstnameId" placeholder="First Name" value={this.state.firstname} onChange={this.handleChange} />
+                <input type="text" name="lastname"  id="lastnameId" placeholder="Last Name" value={this.state.lastname} onChange={this.handleChange} />
                 <button > Submit</button>
             </form>
         </div>);
