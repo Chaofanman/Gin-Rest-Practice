@@ -21,8 +21,9 @@ class Form extends React.Component{
         var firstname = this.state.firstname;
         var lastname = this.state.lastname;
 
-        this.props.onFormSubmit({firstname: firstname, lastname: lastname});
+        console.log(firstname, lastname);
 
+        this.props.onFormSubmit({firstname: firstname, lastname: lastname});
     }
 
     handleChange(event){
