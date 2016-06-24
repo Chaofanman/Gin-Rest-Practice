@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route, Link, browserHistory } from 'react-router';
+import { Router, Route, Link, browserHistory } from 'react-router'
 
 class UserList extends React.Component{
 	constructor(props){
@@ -19,7 +19,7 @@ class UserList extends React.Component{
 			<ul>
 	            {this.props.users.map((user, index) => (
 	            	<li key={index}>
-		                <Link to={`/user/${user.id}`}> {user.id}: {user.Lastname}, {user.Firstname} </Link>
+		                <Link to={`/${user.id}`}> {user.id}: {user.Lastname}, {user.Firstname} </Link>
 		                <button onClick={this.handleDelete} value={user.id}> X </button>
 	                </li>
 	            ))}

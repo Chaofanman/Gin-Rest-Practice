@@ -11,6 +11,7 @@ class User extends React.Component{
 
 	componentDidMount(){
 		this.setState({user: findByUserId(this.props.params.userId)});
+		console.log("in user.js this.state.user: ", this.state.user);
 	}
 
 

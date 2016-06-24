@@ -65,7 +65,6 @@ class App extends React.Component{
 
     }
 
-
     render(){
     	//console.log("Render: ", this.state.users);
         return(<div>
@@ -78,7 +77,7 @@ class App extends React.Component{
 ReactDOM.render(
   	<Router history={browserHistory}>
     	<Route path="/" component={App}>
-        	<Route path="/user/:userId" component={User}/>
+        	<Route path="/:userId" component={User}/>
     	</Route>
   	</Router>,
  	document.getElementById('app')
