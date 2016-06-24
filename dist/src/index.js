@@ -2,7 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import superagent from 'superagent';
 
+import { Router, Route, Link, browserHistory } from 'react-router';
+
 import UserList from './pages/UserList';
+import User from './pages/User';
 import Form from './pages/Form';
 
 class App extends React.Component{
@@ -62,6 +65,7 @@ class App extends React.Component{
 
     }
 
+
     render(){
     	//console.log("Render: ", this.state.users);
         return(<div>
@@ -72,6 +76,10 @@ class App extends React.Component{
 }
 
 ReactDOM.render(
-  <App />,
-  document.getElementById('app')
+  	<Router history={browserHistory}>
+    	<Route path="/" component={App}>
+        	<Route path="/user/:userId" component={User}/>
+    	</Route>
+  	</Router>,
+ 	document.getElementById('app')
 )
