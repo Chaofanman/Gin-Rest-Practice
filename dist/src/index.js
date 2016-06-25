@@ -8,14 +8,18 @@ import UserList from './pages/UserList';
 import User from './pages/User';
 import Form from './pages/Form';
 
+
+
 class App extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            users: []
+            users: [],
+            currentUser: null
         };
         this.formProcess = this.formProcess.bind(this);
         this.deleteProcess = this.deleteProcess.bind(this);
+        this.setCurrentUser = this.setCurrentUser.bind(this);
     }
 
     componentWillMount(){
@@ -65,11 +69,25 @@ class App extends React.Component{
 
     }
 
+    setCurrentUser(data){
+    	superagent.get('http://localhost:9090/api/v1/users/'+data)
+                  .end((error, response) =>{
+                    if(!error && response){
+                    	console.log(response.body);
+                        this.setState({ currentUser: response.body });
+                        console.log("currentUser:", this.state.currentUser);
+                    } else {
+                        console.log("Error fetching",  error);
+                    }
+                });
+    }
+
     render(){
     	//console.log("Render: ", this.state.users);
         return(<div>
             <Form onFormSubmit={this.formProcess}/>
-            <UserList users={this.state.users} onDeleteSubmit={this.deleteProcess}/>
+            <UserList users={this.state.users} getUser={this.setCurrentUser} onDeleteSubmit={this.deleteProcess}/>
+            <User user={this.state.currentUser} />
         </div>);
     }
 }
@@ -77,7 +95,7 @@ class App extends React.Component{
 ReactDOM.render(
   	<Router history={browserHistory}>
     	<Route path="/" component={App}>
-        	<Route path="/:userId" component={User}/>
+        	<Route path="/:userId" component={User} />
     	</Route>
   	</Router>,
  	document.getElementById('app')

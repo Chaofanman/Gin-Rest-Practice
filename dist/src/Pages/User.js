@@ -1,27 +1,40 @@
 import React from 'react';
-import { Router, Route, Link, browserHistory } from 'react-router';
 
-class User extends React.Component{
-	constructor(props){
-		super(props);
-		this.state = {
-			user: ""
-		};
-	}
+const User = ({user}) =>  {
 
-	componentDidMount(){
-		this.setState({user: findByUserId(this.props.params.userId)});
-		console.log("in user.js this.state.user: ", this.state.user);
-	}
+	console.log("In user: ", user)
 
 
-	render(){
-		return(<div>
-			<h1> Id: {this.state.user.id} </h1>
-			<h1> Lastname: {this.state.user.lastname} </h1>
-			<h1> First: {this.state.user.firstname} </h1>
-		</div>);
-	}
+	return(<div>
+		<h1> {user.id} </h1>
+		<h1> {user.firstname} </h1>
+		<h1> {user.lastname} </h1>
+	</div>);
+
 }
 
 export default User;
+
+// import React from "react";
+
+// const VideoListItem = ({video, onVideoSelect}) => {
+// 	// const video = props.video;
+// 	const imageUrl = video.snippet.thumbnails.default.url;
+
+// 	return (
+// 		<li onClick = {() =>onVideoSelect(video)}className = "list-group-item">
+// 			<div className = "video-list media">
+// 				<div className = "media-left">
+// 					<img className = "media-object" src = {imageUrl} />
+// 				</div>
+// 				<div className = "media-body">
+// 					<div className = "media-head">
+// 						{video.snippet.title}
+// 					</div>
+// 				</div>
+// 			</div>
+// 		</li>
+// 	);
+// };
+
+// export default VideoListItem;
