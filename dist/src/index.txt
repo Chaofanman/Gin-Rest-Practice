@@ -23,7 +23,6 @@ class App extends React.Component{
         };
         this.formProcess = this.formProcess.bind(this);
         this.deleteProcess = this.deleteProcess.bind(this);
-		this.setCurrentUser = this.setCurrentUser.bind(this);
     }
 
     componentWillMount(){
@@ -31,6 +30,9 @@ class App extends React.Component{
     }
 
     deleteProcess(data){
+    	//console.log("In deleteProcess");
+    	//console.log("Id: ", data);
+    	//curl -i -X DELETE http://localhost:9090/api/v1/users/1
     	superagent.del('http://localhost:9090/api/v1/users/' + data)
     				.end((error, response) => {
     					if(error || !response.ok){
@@ -43,6 +45,7 @@ class App extends React.Component{
     }
 
     formProcess(data){
+        console.log("IN FORM PROCESS", data);
         superagent.post('http://localhost:9090/api/v1/users')
                     .send(data)
                     .set('Accept', 'application/json')
@@ -73,7 +76,9 @@ class App extends React.Component{
     	superagent.get('http://localhost:9090/api/v1/users/'+data)
                   .end((error, response) =>{
                     if(!error && response){
+                    	console.log(response.body);
                         this.setState({ currentUser: response.body });
+                        console.log("currentUser:", this.state.currentUser);
                     } else {
                         console.log("Error fetching",  error);
                     }
@@ -81,19 +86,24 @@ class App extends React.Component{
     }
 
     render(){
+    	this.setCurrentUser = this.setCurrentUser.bind(this);
+    	console.log("Before render ", this.state.currentUser);
+    	//console.log("Render: ", this.state.users);
         return(<div>
             <Form onFormSubmit={this.formProcess}/>
             <UserList users={this.state.users} getUser={this.setCurrentUser} onDeleteSubmit={this.deleteProcess}/>
-            <User user={this.state.currentUser} />
+            {this.props.children}
         </div>);
     }
 }
 
-ReactDOM.render((
-	<Router history={browserHistory}>
+var that = this;
+
+ReactDOM.render(
+  	<Router history={browserHistory}>
     	<Route path="/" component={App}>
-        	<Route path="/:userId" component={User} />
+        	<Route path="/:userId" component={User} user={that.state.currentUser}/>
     	</Route>
-  	</Router>),
+  	</Router>,
  	document.getElementById('app')
 )
