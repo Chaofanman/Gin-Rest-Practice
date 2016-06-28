@@ -24,6 +24,7 @@ class App extends React.Component{
         this.formProcess = this.formProcess.bind(this);
         this.deleteProcess = this.deleteProcess.bind(this);
 		this.setCurrentUser = this.setCurrentUser.bind(this);
+		this.indexEditUser = this.indexEditUser.bind(this);
     }
 
     componentWillMount(){
@@ -57,6 +58,10 @@ class App extends React.Component{
                     });
     }
 
+    indexEditUser(data){
+    	console.log("In indexEditUser, data:", data);
+    }
+
     getUsers(){
     	superagent.get('http://localhost:9090/api/v1/users')
                   .end((error, response) =>{
@@ -80,11 +85,14 @@ class App extends React.Component{
                 });
     }
 
+
     render(){
+
         return(<div>
             <Form onFormSubmit={this.formProcess}/>
             <UserList users={this.state.users} getUser={this.setCurrentUser} onDeleteSubmit={this.deleteProcess}/>
-            <User user={this.state.currentUser} />
+            {this.state.currentUser.id != "" ? (<User user={this.state.currentUser} editUser={this.indexEditUser} />): <div></div> }
+            
         </div>);
     }
 }
