@@ -176,6 +176,7 @@ func UpdateUser(c *gin.Context) {
 		c.JSON(404, gin.H{"error": "user not found"})
 	}
 	//curl -i -X PUT -H "Content-Type: application/json" -d "{ \"firstname\": \"Mara\", \"lastname\": \"Shen\" }" http://localhost:9090/api/v1/users/1
+
 }
 
 func DeleteUser(c *gin.Context) {

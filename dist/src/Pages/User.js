@@ -1,36 +1,5 @@
 import React from 'react';
 
-// const User = ({user}) =>  {
-// 	console.log("In user: ", user);
-
-// 	var showButtonAndInputs = function (){
-// 		if (user.id != ""){
-// 			return(
-// 				<div>
-// 					<button> EDIT </button>
-// 					<input placeholder="firstname"/>
-// 					<input placeholder="lastname"/>
-// 			</div>)
-// 		}
-// 	}
-
-// 	var handleSubmit = function(){
-
-// 	}
-
-// 	return(<div>
-// 		<h1> {user.id} </h1>
-// 		<h1> {user.Firstname} </h1>
-// 		<h1> {user.Lastname} </h1>
-// 		{user.id != "" ?(<div>
-// 					<input placeholder="firstname" />
-// 					<input placeholder="lastname"/>
-// 					<button> EDIT </button>
-// 			</div>): <div></div>}
-// 	</div>);
-
-// }
-
 class User extends React.Component{
 	constructor(props){
 		super(props)
@@ -39,6 +8,20 @@ class User extends React.Component{
 			Firstname: this.props.user.Firstname,
 			Lastname: this.props.user.Lastname
 		}
+		this.handleUpdate = this.handleUpdate.bind(this);
+	}
+
+	handleUpdate(event){
+		event.preventDefault();
+		var Firstname = document.getElementById('to_update_firstname').value;
+		var Lastname = document.getElementById('to_update_lastname').value;
+		var id = this.state.id
+		console.log("Id:", this.state.id)
+		console.log("First name: ", Firstname);
+		console.log("Last name: ", Lastname);
+
+		this.props.getUpdatedUser({id, Firstname, Lastname})
+
 	}
 
 	render(){
@@ -46,9 +29,9 @@ class User extends React.Component{
 			<h1> {this.state.id} </h1>
 			<h1> {this.state.Firstname} </h1>
 			<h1> {this.state.Lastname} </h1>
-			<input placeholder="Firstname" name="user_firstname" />
-			<input placeholder="Lastname" name="user_lastname" />
-			<button> EDIT </button>
+			<input placeholder="Edit First Name" id="to_update_firstname" />
+			<input placeholder="Edit Last Name" id="to_update_lastname" />
+			<button type="submit" value={this.state.id}onClick={this.handleUpdate}> EDIT </button>
 		</div>)
 	}
 }

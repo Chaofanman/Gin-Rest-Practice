@@ -28,9 +28,6 @@ class Form extends React.Component{
         } else {
         	alert("You have no input");
         }
-        
-
-        
     }
 
     handleChange(event){
@@ -47,7 +44,7 @@ class Form extends React.Component{
             <form className="inputForm" onSubmit={this.handleSubmit}>
                 <input type="text" name="firstname" id="firstnameId" placeholder="First Name" value={this.state.firstname} onChange={this.handleChange} />
                 <input type="text" name="lastname"  id="lastnameId" placeholder="Last Name" value={this.state.lastname} onChange={this.handleChange} />
-                <button > Submit</button>
+                <button type="submit"> Submit</button>
             </form>
         </div>);
       }

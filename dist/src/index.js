@@ -24,7 +24,7 @@ class App extends React.Component{
         this.formProcess = this.formProcess.bind(this);
         this.deleteProcess = this.deleteProcess.bind(this);
 		this.setCurrentUser = this.setCurrentUser.bind(this);
-		this.indexEditUser = this.indexEditUser.bind(this);
+		this.updateUser = this.updateUser.bind(this);
     }
 
     componentWillMount(){
@@ -58,8 +58,22 @@ class App extends React.Component{
                     });
     }
 
-    indexEditUser(data){
-    	console.log("In indexEditUser, data:", data);
+    updateUser(data){
+    	//console.log("In updateUser, data:", data);
+    	console.log("In update User, data: ", data);
+    	superagent.put('http://localhost:9090/api/v1/users/' + data.id)
+    				.send(data)
+    				.set('Accept', 'application/json')
+    				.end((error, response) => {
+    					if(error || !response.ok){
+    						alert("Error Updating: ", error);
+    						console.log(error)
+    					} else {
+    						console.log("response.body: ",response.body);
+    						JSON.stringify(response.body);
+    						this.getUsers();
+    					}
+    				});
     }
 
     getUsers(){
@@ -91,7 +105,7 @@ class App extends React.Component{
         return(<div>
             <Form onFormSubmit={this.formProcess}/>
             <UserList users={this.state.users} getUser={this.setCurrentUser} onDeleteSubmit={this.deleteProcess}/>
-            {this.state.currentUser.id != "" ? (<User user={this.state.currentUser} editUser={this.indexEditUser} />): <div></div> }
+            {this.state.currentUser.id != "" ? (<User user={this.state.currentUser} getUpdatedUser={this.updateUser} />): <div></div> }
             
         </div>);
     }
